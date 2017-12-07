@@ -3,13 +3,16 @@
 import argparse
 import json
 
-def main(filename, nlines):
+def printnlines(filename, nlines):
+    data, lines = loadfile(filename)
+    for item in lines[:nlines]:
+        print item
+
+def loadfile(filename):
     with open(filename, 'r') as f:
         data = json.load(f)
-    lines = json.dumps(data, indent=4).split('\n')[:nlines]
-
-    for item in lines:
-        print item
+    lines = json.dumps(data, indent=4).split('\n')
+    return data, lines
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser(
@@ -20,7 +23,7 @@ if __name__=='__main__':
     parser.add_argument('-n', '--nlines',
                         help='Number of lines to print from file',
                         required=False)
-
+    
     args = vars(parser.parse_args())
     
     filename = args['filename']
@@ -29,6 +32,6 @@ if __name__=='__main__':
         nlines = int(args['nlines'])
     else:
         nlines = None
-    
-    main(filename, nlines)
+
+    printnlines(filename, nlines)
 
